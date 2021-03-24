@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Content
+  - PlayersContent
+  - PeriodsContent
+  - BadgesDownButton
+  - BadgesWindow
+  - AutoModePlayerContent
+  - AutoModePeriodContent
+  - LateralMenuComponent
+  - lastButton
+  - MainMenu
+  - Settings
+  - Image
+  - 0,0
+  - PointsOfImportance
+  - Superstructures
+  - Tiles
+  - UserMenuTeamContent
+  - UserMenuLogsContent
+  - BadgeMenuContent
+  - MapSetup
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - background
+  - Map
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: MainMenu
+    uniqueID: 1143777039
+    locked: 0
+  - name: Background
+    uniqueID: 359185511
+    locked: 0
