@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-
 public class PanelController : MonoBehaviour
 {
     [SerializeField]
@@ -7,23 +6,51 @@ public class PanelController : MonoBehaviour
     [SerializeField]
     float zommOutMax = 8f;
     public Camera cam;
-    public float groundZ = 0;
-    private Vector3 touchStart; 
+    private Vector3 touchStart;
+    public float velocity = 5.0f;
+    public GameObject TileObjectPrefab;
+    public int MapSizeX;
+    public int MapSizeY;
 
     private void Update()
     {
-        ZoomInAndOutMobile();
-        ZoomInAndOut();
-
         if (Input.GetMouseButtonDown(0))
         {
-            touchStart = GetWorldPosition(groundZ);
+            touchStart = GetWorldPosition();
         }
+
         if (Input.GetMouseButton(0))
         {
-            Vector3 direction = touchStart - GetWorldPosition(groundZ);
+            Vector3 direction = touchStart - GetWorldPosition();
             cam.transform.position += direction;
         }
+
+        ZoomInAndOutMobile();
+        ZoomInAndOut();
+        CameraAreaBoundary();
+    }
+
+    private void CameraAreaBoundary()
+    {
+        var tileHeight = TileObjectPrefab.GetComponent<RectTransform>().sizeDelta.y - 15;
+        var tileWidth = TileObjectPrefab.GetComponent<RectTransform>().sizeDelta.x;
+
+        var rectCamera = cam.GetComponent<RectTransform>();
+
+        var yMax = rectCamera.anchorMin.y;
+        var xMax = rectCamera.anchorMin.x;
+
+       var worldVector = transform.TransformPoint(new Vector3(MapSizeX * tileWidth, MapSizeY * tileHeight, 0));
+
+        var yMin = yMax - worldVector.y;
+        var xMin = xMax - worldVector.x;
+
+        float xPositionLimit = Mathf.Clamp(cam.transform.position.x, xMin, xMax);
+        float yPositionLimit = Mathf.Clamp(cam.transform.position.y, yMin, yMax);
+
+        cam.transform.position = new Vector3(xPositionLimit, yPositionLimit, 0);
+
+     
     }
 
     void ZoomInAndOut()
@@ -88,16 +115,15 @@ public class PanelController : MonoBehaviour
         }
     }
 
-    private Vector3 GetWorldPosition(float z)
+    private Vector3 GetWorldPosition()
     {
         Ray mousePos = cam.ScreenPointToRay(Input.mousePosition);
-        Plane ground = new Plane(Vector3.forward, new Vector3(0, 0, z));
+        Plane ground = new Plane(Vector3.forward, new Vector3(0, 0, 0));
+
         float distance;
         ground.Raycast(mousePos, out distance);
         return mousePos.GetPoint(distance);
     }
-
-
 }
 
 

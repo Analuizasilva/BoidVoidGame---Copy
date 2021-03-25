@@ -1,15 +1,8 @@
-﻿
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using Assets.Scripts.GameModel;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using BlockBase.BoidGame.BoidVoidGame.Assets.Scripts;
-
+using Assets.Scripts.GameModel;
+using UnityEngine;
+using UnityEngine.UI;
 public class TileMap : MonoBehaviour
 {
     [HideInInspector]
@@ -24,7 +17,6 @@ public class TileMap : MonoBehaviour
     public int MapSizeX;
     public int MapSizeY;
     private List<GameObject> allTiles;
-
 
     void Awake()
     {
@@ -134,39 +126,6 @@ public class TileMap : MonoBehaviour
         });
 
     }
-    void GenerateTileBarrier()
-    {
-        var tileHeight = TileObjectPrefab.GetComponent<RectTransform>().sizeDelta.y - 15;
-        var tileWidth = TileObjectPrefab.GetComponent<RectTransform>().sizeDelta.x;
-
-        var content = GameObject.FindGameObjectWithTag("Content");
-
-
-        var rectContent = content.GetComponent<RectTransform>();
-
-        var yMax = rectContent.anchorMin.y;
-        var xMax = rectContent.anchorMin.x;
-
-        var yMin = yMax - (MapSizeY * tileHeight);
-        var xMin = xMax - (MapSizeX * tileWidth);
-
-        if (rectContent.anchoredPosition3D.x < xMin)
-        {
-            rectContent.anchoredPosition3D = new Vector3(xMin, rectContent.anchoredPosition3D.y, rectContent.anchoredPosition3D.z);
-        }
-        if (rectContent.anchoredPosition3D.x > xMax)
-        {
-            rectContent.anchoredPosition3D = new Vector3(xMax, rectContent.anchoredPosition3D.y, rectContent.anchoredPosition3D.z);
-        }
-        if (rectContent.anchoredPosition3D.y < yMin)
-        {
-            rectContent.anchoredPosition3D = new Vector3(rectContent.anchoredPosition3D.x, yMin, rectContent.anchoredPosition3D.z);
-        }
-        if (rectContent.anchoredPosition3D.y > yMax)
-        {
-            rectContent.anchoredPosition3D = new Vector3(rectContent.anchoredPosition3D.x, yMax, rectContent.anchoredPosition3D.z);
-        }
-    }
 
     void OpenSidePanel()
     {
@@ -237,68 +196,8 @@ public class TileMap : MonoBehaviour
 
     }
 
-    void LimitArea()
-    {
-        var tileHeight = TileObjectPrefab.GetComponent<RectTransform>().sizeDelta.y - 15;
-        var tileWidth = TileObjectPrefab.GetComponent<RectTransform>().sizeDelta.x;
-
-        var content = GameObject.FindGameObjectWithTag("Content");
-        var rectT = content.GetComponent<RectTransform>();
-        var tiles = GameObject.FindGameObjectWithTag("Tiles").GetComponentsInChildren<RectTransform>();
-
-        var yBorderLimitMax = rectT.anchorMin.y;
-        var xBorderLimitMax = rectT.anchorMin.x;
-
-        var yBorderLimitMin = yBorderLimitMax - (MapSizeY * tileHeight);
-        var xBorderLimitMin = xBorderLimitMax - (MapSizeX * tileWidth);
-
-        var firstTile = tiles[0];
-        xBorderLimitMin = firstTile.anchoredPosition.x;
-        xBorderLimitMax = firstTile.anchoredPosition.x;
-
-        yBorderLimitMin = firstTile.anchoredPosition.y;
-        yBorderLimitMax = firstTile.anchoredPosition.y;
-
-
-        foreach (var tile in tiles)
-        {
-            if (tile.anchoredPosition.x <= xBorderLimitMin)
-            {
-                xBorderLimitMin = tile.anchoredPosition.x;
-            }
-
-            if (tile.anchoredPosition.y <= yBorderLimitMin)
-            {
-                yBorderLimitMin = tile.anchoredPosition.y;
-            }
-
-            if (tile.anchoredPosition.x >= xBorderLimitMax)
-            {
-                xBorderLimitMax = tile.anchoredPosition.x;
-            }
-
-            if (tile.anchoredPosition.y >= yBorderLimitMax)
-            {
-                yBorderLimitMax = tile.anchoredPosition.y;
-            }
-        }
-
-        xBorderLimitMax *= 3;
-        yBorderLimitMax *= 3;
-        var vectorMax = new Vector3(xBorderLimitMax, yBorderLimitMax, 0);
-        var vectorMin = new Vector3(xBorderLimitMin, yBorderLimitMin, 0);    
-
-
-        var eixoX = Mathf.Clamp(rectT.anchoredPosition.x, vectorMin.x, vectorMax.x);
-        var eixoY = Mathf.Clamp(rectT.anchoredPosition.y, vectorMin.y, vectorMax.y);
-
-        rectT.anchoredPosition = new Vector3(eixoX, eixoY, rectT.transform.position.z);
-    }
-
-
     private void Update()
     {
-        LimitArea();
         var sidePanelComponents = SidePanel.GetComponentsInChildren<Text>();
         var positionInPanel = sidePanelComponents.Where(x => x.name == "Position").SingleOrDefault().text;
         var playerActionPoints = Player.GetComponent<Player>().ActionPoints;
@@ -333,7 +232,6 @@ public class TileMap : MonoBehaviour
                         }
                     }
                 }
-
             }
 
             if (allTiles[t].transform.position.ToString() == playerPosition.ToString()) displayUI.isPressed = true;
@@ -349,6 +247,5 @@ public class TileMap : MonoBehaviour
                 }
             }
         }
-
     }
 }
